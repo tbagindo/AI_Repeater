@@ -59,8 +59,21 @@ void handleRoot(){
   String  s ="<html><body><p>WiFi.mode(WIFI_AP_STA) status</p>";
           s +="<p>SSID : " + WiFi.SSID() + "</p>";
           s +="<p>RSSI : " + String(rssi) + "db</p>";
+          s +="<p>stat : " + wifiStatus() + "</p>";
           s +="</body></html>"; 
   server.send(200,"text/html",s);         
+}
+
+String wifiStatus(){
+  String s;
+  if(WiFi.status() == 0)s += "WL_IDLE_STATUS";
+  if(WiFi.status() == 1)s += "WL_NO_SSID_AVAIL";
+  if(WiFi.status() == 2)s += "WL_SCAN_COMPLETED";
+  if(WiFi.status() == 3)s += "WL_CONNECTED";
+  if(WiFi.status() == 4)s += "WL_CONNECT_FAILED";
+  if(WiFi.status() == 5)s += "WL_CONNECTION_LOST";
+  if(WiFi.status() == 6)s += "WL_DISCONNECTED";
+  return s;
 }
 
 void loop(){
