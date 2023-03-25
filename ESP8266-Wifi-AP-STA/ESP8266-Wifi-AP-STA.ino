@@ -9,13 +9,12 @@
  */
 
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
 
-//Station SSID
+//Station SSID & Password
 const char *stSSID = "mktApaITU";
 const char *stPASS = "1234567890";
 
-//Access Point SSID
+//Access Point SSID & Password
 const char *SSID = "ApaITU-Demo";
 const char *PASS = "1234567890";
 
@@ -32,6 +31,14 @@ void setup(){
   //Connection to Main RouterAP
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(stSSID,stPASS);
+
+  /* Blocking 
+  while(WiFi.stastus() != WL_CONNECTED){
+    Serial.println(".");
+    delay(500);
+  }
+  */
+  
   WiFi.setAutoReconnect(true);
   WiFi.persistent(true);
   Serial.println(WiFi.localIP());
