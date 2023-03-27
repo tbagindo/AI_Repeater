@@ -83,8 +83,8 @@ void setup() {
   Serial.println();
   Serial.print("Sketch File Name : ");
   Serial.println(__FILE__);
-  pinMode(2, OUTPUT);
-  digitalWrite(2,!ledState);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN,!ledState);
   pinMode(dhtPin,INPUT);
   delay(3000);
   ledState = !ledState;
@@ -113,7 +113,7 @@ void setup() {
   dhcpSoftAP.dhcps_set_dns(0, WiFi.dnsIP(0));
   dhcpSoftAP.dhcps_set_dns(1, WiFi.dnsIP(1));
   WiFi.softAPConfig(local_IP,gateway,subnet);
-  WiFi.softAP(SSID,PASS,max-conn);
+  WiFi.softAP(SSID,PASS);
   DEBUG_SERIAL.println(WiFi.softAPIP());
   
   //webserver  request handler
@@ -125,6 +125,7 @@ void setup() {
   server.on("/Temp",getTemp);
   server.on("/Humid",getHumid);
   server.on("/state",getState);
+  server.on("/getPTimer, getPTimer);
   server.on("/getRSSI",getRSSI);
   server.on("/getSSID",getSSID);
   server.on("/rssi",handleRSSI);
@@ -148,13 +149,20 @@ void setup() {
 // Checks if motion was detected, sets LED HIGH and starts a timer
 ICACHE_RAM_ATTR void detectsMovement() {
   DEBUG_SERIAL.println("MOTION DETECTED!!!");
-  if(!ledState){
-    digitalWrite(2, LOW);
-    startTimer = true;
-    lastTrigger = millis();
+  //startTimer & reset lastTrigger to current time
+  startTimer = true;
+  lastTrigger = millis();
+  if(mFlag && !ledState){                 // if Mode=Auto && LED OFF >> turn on light
+    ledState = 1;                         // ledState 1 = ON, ledState 0 = OFF 
+    digitalWrite(LED_BUILTIN,!ledState);  //turn ON light (we have active low system always use !ledState on digitalWrite)
   }
 }
 
+void getPTimer(){
+  int i = (millis()-lastTrigger)/1000;
+  String s = String(i);
+  server.send(200,"text/plain",s);
+}
 void getRSSI(){
   String s="";
   if(WiFi.status() == WL_CONNECTED){
@@ -276,7 +284,10 @@ void loop() {
   // Turn off the LED after the number of seconds defined in the timeSeconds variable
   if(startTimer && (now - lastTrigger > (timeSeconds*1000))) {
     DEBUG_SERIAL.println("Motion stopped...");
-    digitalWrite(2, HIGH);
+    if(mFlag && ledState){                  //if auto Mode && led ON >> turn off light
+      ledState = 0;                         //ledState 1=ON,  ledState 0=OFF
+      digitalWrite(LED_BUILTIN, !ledState); // we have active low system, use !ledState instead  ledState on digitalWrite() statemenmt
+    }
     startTimer = false;
     tCount=0;
   }

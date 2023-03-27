@@ -132,7 +132,12 @@ static const char MAIN_PAGE[] PROGMEM = R"==(
           <span class="slider"></span>
         </label>
     </p>
-
+    <p>
+      <i class="fas fa-wifi" style="color:#00add6;"></i>
+      <span class="WiFi-labels">PIR Timer</span>
+      <span id="pirTimer">0</span>
+      <sup class="units">seconds</sup>
+    </p>
   </body>
   <script>
   function ledButton(id){
@@ -177,6 +182,21 @@ static const char MAIN_PAGE[] PROGMEM = R"==(
     xhttp.open("GET", "/Temp", true);
     xhttp.send();
   }, 4000 ) ;
+  
+  setInterval(function ( ) {
+    const button = document.getElementById("led-mode");
+    if(button.checked){
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("pirTimer").innerHTML = this.responseText;
+        }
+      };
+      xhttp.open("GET", "/getPTimer", true);
+      xhttp.send();
+    }
+
+  }, 1000 ) ;
 
   setInterval(function ( ) {
     var xhttp = new XMLHttpRequest();
