@@ -1,4 +1,5 @@
 /*
+ * ESP8266 core version 3.0.2
  * Project ESP8266-01 Wifi Router plus plus
  * we make "RangeExtender" actually WiFi router based on esp8266-01
  * we use ApaITU SmartSwitch board as the base system
@@ -61,9 +62,14 @@ bool mFlag=false;
 
 
 //IPAddress
-IPAddress local_IP(192,168,2,1); 
-IPAddress gateway(192,168,2,1); 
+//station interface
+IPAddress staIP(192,168,1,2); 
+IPAddress staGW(192,168,1,200); 
 IPAddress subnet(255,255,255,0);
+IPAddress dns(192,168,1,200);
+//softAP interface
+IPAddress apIP(192,168,2,1);
+IPAddress apGW(192,168,2,1);
 
 //Station SSID
 const char *stSSID = "mktApaITU";
@@ -95,6 +101,7 @@ void setup() {
   //Connection to Main RouterAP
   WiFi.setOutputPower(txPwr); 
   WiFi.mode(WIFI_AP_STA);
+  WiFi.config(staIP,staGW,subnet,dns);
   WiFi.begin(stSSID,stPASS);
   /*
   while(WiFi.status() != 3){
@@ -112,7 +119,7 @@ void setup() {
   //Access Point
   dhcpSoftAP.dhcps_set_dns(0, WiFi.dnsIP(0));
   dhcpSoftAP.dhcps_set_dns(1, WiFi.dnsIP(1));
-  WiFi.softAPConfig(local_IP,gateway,subnet);
+  WiFi.softAPConfig(apIP,apGW,subnet);
   WiFi.softAP(SSID,PASS);
   DEBUG_SERIAL.println(WiFi.softAPIP());
   
