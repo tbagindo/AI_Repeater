@@ -16,7 +16,8 @@ There is a flaw in library, by default dhcp server will set the softAPIP (interf
 <p>a) run dns server on esp8266</p>
 <p>b) set the ip correct ip of dns server</b></p>
 
-we prefer the second option
+
+<p>we prefer the second option</p>
 
 <b>for esp8266 core 3.0.x :</b>
 
@@ -30,7 +31,7 @@ dhcpSoftAP.dhcps_set_dns(0, WiFi.dnsIP(0));
 dhcpSoftAP.dhcps_set_dns(1, WiFi.dnsIP(1));
 
 <b>for esp8266 core 3.1.x<b>
-in void setup()</b>
+<p>in void setup()</p></b>
  
 auto& dserver = WiFi.softAPDhcpServer();
 dserver.setDns(WiFi.dnsIP(0));
