@@ -29,7 +29,7 @@ set the dns ip address of station side dns as the  entry
 dhcpSoftAP.dhcps_set_dns(0, WiFi.dnsIP(0));
 dhcpSoftAP.dhcps_set_dns(1, WiFi.dnsIP(1));
 
-for esp8266 core 3.1.x
+<b>for esp8266 core 3.1.x</b>
 add following line in void setup() 
 auto& dserver = WiFi.softAPDhcpServer();
 dserver.setDns(WiFi.dnsIP(0));
