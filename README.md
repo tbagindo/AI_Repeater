@@ -19,6 +19,7 @@ There is a flaw in library, by default dhcp server will set the softAPIP (interf
 
 <p>we prefer the second option</p>
 
+
 <b>for esp8266 core 3.0.x :</b>
 
 use LwipDhcpServer.h library
@@ -29,6 +30,7 @@ use LwipDhcpServer.h library
 
 dhcpSoftAP.dhcps_set_dns(0, WiFi.dnsIP(0));
 dhcpSoftAP.dhcps_set_dns(1, WiFi.dnsIP(1));
+
 
 <b>for esp8266 core 3.1.x
 <p>in void setup()</p></b>
